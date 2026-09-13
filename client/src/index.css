@@ -100,6 +100,147 @@ button, input { font: inherit; } button { border: 0; } a { color: inherit; text-
 @media (prefers-reduced-motion: reduce) { .ink-layer polyline { animation: none; stroke-dashoffset: 0; }.share-button-large::after { transition: none; }.copy-tooltip { animation: none; } }
 
 /* ==========================================================================
+   Section 03 Loop Card Window & Modal Navigation
+   ========================================================================== */
+.loop-card-window {
+  width: 100%;
+  max-width: 860px;
+  margin: 30px auto 0;
+  border-radius: 16px;
+  background: #141e30;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.loop-window-header {
+  height: 38px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #0f172a;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.window-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 9px "DM Mono", monospace;
+  color: #78a52b;
+}
+
+.loop-card-bottom-pills {
+  margin-top: 30px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pills-label {
+  font: 600 9px "DM Mono", monospace;
+  color: #7785a0;
+  letter-spacing: 0.08em;
+}
+
+.card-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #aebbd0;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  font: 500 11px "Space Grotesk", sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.card-pill-btn:hover {
+  color: #ffffff;
+  border-color: #1e49da;
+  background: rgba(30, 73, 218, 0.3);
+}
+
+.card-pill-btn.active {
+  color: #ffffff;
+  background: #1e49da;
+  border-color: #1e49da;
+  box-shadow: 0 4px 12px rgba(30, 73, 218, 0.25);
+}
+
+.modal-header-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.modal-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  color: #1e49da;
+  background: #eef2ff;
+  border-radius: 6px;
+  font: 600 11px "Space Grotesk", sans-serif;
+  transition: background 0.18s ease;
+}
+
+.modal-back-btn:hover {
+  background: #dce4ff;
+}
+
+.prominent-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  color: #1e49da !important;
+  background: #e4eaff;
+  border-radius: 999px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.prominent-back-btn:hover {
+  background: #d4e0ff;
+  transform: translateX(-2px);
+}
+
+.back-home-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #1e49da;
+  color: #ffffff !important;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 12px;
+  transition: transform 0.18s ease, background 0.18s ease;
+}
+
+.back-home-cta:hover {
+  background: #153bc2;
+  transform: translateY(-1px);
+}
+
+.success-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+
+
+/* ==========================================================================
    Screen Mockup Studio & Proportional Device Frames
    ========================================================================== */
 .screen-studio-container {

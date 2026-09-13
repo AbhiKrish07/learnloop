@@ -109,9 +109,10 @@ function CoachPanel({ stage }: { stage: LearningStage }) {
 }
 
 function IpadProduct({ scrollY, compact = false }: { scrollY: number; compact?: boolean }) {
-  const rotation = compact ? 0 : Math.min(8, scrollY * 0.008);
-  const lift = compact ? 0 : Math.min(44, scrollY * 0.055);
+  const rotation = 0;
+  const lift = 0;
   const stage: LearningStage = scrollY < 420 ? "observe" : scrollY < 1050 ? "surface" : "adapt";
+
   const [penMode, setPenMode] = useState(false);
   const [inkStrokes, setInkStrokes] = useState<InkStroke[]>(() => { try { return JSON.parse(localStorage.getItem("learnloop-ink-strokes") || "[]") as InkStroke[]; } catch { return []; } });
   const [noteTitle, setNoteTitle] = useState(() => localStorage.getItem("learnloop-note-title") || "Chain rule — session 08");
@@ -224,19 +225,206 @@ export default function Home() {
         </section>
 
 
-        <section id="how-it-works" className="loop-section page-section"><div className="section-label"><span>03</span><span>FROM NOTE TO NEXT MOVE</span></div><div className="loop-heading"><h2>The loop gets<br /><em>smarter with you.</em></h2><p>Scroll through the moments that make LearnLoop feel different.</p></div><div className="loop-layout"><div className="loop-steps"><button className={selectedMode === "diagnose" ? "active" : ""} onClick={() => setSelectedMode("diagnose")}><span>01</span><ScanIcon /> <strong>Diagnose</strong><ChevronRight size={14} /></button><button className={selectedMode === "teach" ? "active" : ""} onClick={() => setSelectedMode("teach")}><span>02</span><Layers3 size={17} /><strong>Teach</strong><ChevronRight size={14} /></button><button className={selectedMode === "adapt" ? "active" : ""} onClick={() => setSelectedMode("adapt")}><span>03</span><GitBranch size={17} /><strong>Adapt</strong><ChevronRight size={14} /></button></div><div className={`loop-card loop-${selectedMode}`}><div className="loop-card-top"><span>{selectedMode === "diagnose" ? "LIVE NOTE / 08" : selectedMode === "teach" ? "COACH OUTPUT / 02" : "NEXT SESSION / 01"}</span><span><i /> RESONANCE</span></div>{selectedMode === "diagnose" && <><div className="loop-card-icon"><CircleHelp size={22} /></div><h3>Find the gap<br />inside the answer.</h3><p>LearnLoop spots the step you skip — even when the final line is correct.</p><div className="loop-mini-note"><span>u = 3x² + 1</span><b>inner function missing</b></div></>}{selectedMode === "teach" && <><div className="loop-card-icon"><MessageCircle size={22} /></div><h3>Change the<br />shape of the help.</h3><p>A prompt, a map, or a worked example — chosen from the way you learn best.</p><div className="output-pills"><span>mind map</span><span>worked example</span><span className="selected">2 min prompt</span></div></>}{selectedMode === "adapt" && <><div className="loop-card-icon"><Zap size={22} /></div><h3>Make the next<br />move smaller.</h3><p>One focused practice, tied to one recurring pattern. No busywork.</p><div className="adapt-card"><Check size={14} /><span>separate inside / outside changes</span><ArrowRight size={14} /></div></>}</div></div></section>
+        <section id="how-it-works" className="loop-section page-section">
+          <div className="section-label"><span>03</span><span>FROM NOTE TO NEXT MOVE</span></div>
+          <div className="loop-heading">
+            <h2>The loop gets<br /><em>smarter with you.</em></h2>
+            <p>Watch how LearnLoop notices recurring patterns and guides your next move.</p>
+          </div>
 
-        <section className="map-section page-section"><div className="map-copy"><div className="section-label"><span>04</span><span>YOUR LEARNING MODEL</span></div><h2>See where you are<br /><em>without the gamification.</em></h2><p>No streaks. No badges. Just a living map of the concepts you have actually demonstrated.</p><button className="text-link" onClick={() => setDemoOpen(true)}>View a sample map <ArrowUpRight size={15} /></button></div><div className="concept-map"><div className="map-grid" />{conceptNodes.map((node) => <div key={node.label} className={`concept-node ${node.state}`} style={{ left: node.x, top: node.y }}><span>{node.state === "gap" ? <CircleHelp size={12} /> : node.state === "done" ? <Check size={11} /> : <span />}</span>{node.label}</div>)}<svg className="concept-lines" viewBox="0 0 600 360" preserveAspectRatio="none"><path d="M95 145 L235 68 L372 160 L215 260 L470 276" /><path d="M235 68 L372 160" /></svg><div className="map-legend"><span><i className="legend-dot done" /> demonstrated</span><span><i className="legend-dot gap" /> needs evidence</span><span><i className="legend-dot locked" /> not yet</span></div></div></section>
+          <div className="loop-card-window">
+            {/* macOS 3-Dots Window Navbar */}
+            <div className="loop-window-header">
+              <div className="window-dots">
+                <span className="dot red" />
+                <span className="dot yellow" />
+                <span className="dot green" />
+              </div>
+              <span className="window-title">LearnLoop Residency Engine — Active Loop Mode</span>
+              <span className="window-badge"><i className="live-dot" /> Live Observation</span>
+            </div>
 
-        <section ref={finalSectionRef} className={`final-section ${finalVisible ? "is-visible" : ""}`} style={{ backgroundColor: "#09418e" }}><div className="final-grid" /><div className="final-copy"><div className="section-label light"><span>05</span><span>THE LAST TWO HOURS</span></div><h2>Stop rereading<br /><em>everything.</em></h2><p>Let the coach tell you what is worth your attention — because it was there when you learned it.</p><Link className="primary-button" href="/waitlist?focus=email">Request early access <ArrowUpRight size={16} /></Link></div><div className="final-ipad"><IpadProduct scrollY={0} compact /></div></section>
+            {/* Card Main Interface View */}
+            <div className={`loop-card loop-${selectedMode}`}>
+              <div className="loop-card-top">
+                <span>{selectedMode === "diagnose" ? "LIVE NOTE / 08" : selectedMode === "teach" ? "COACH OUTPUT / 02" : "NEXT SESSION / 01"}</span>
+                <span><i /> RESONANCE</span>
+              </div>
+
+              {selectedMode === "diagnose" && (
+                <>
+                  <div className="loop-card-icon"><CircleHelp size={22} /></div>
+                  <h3>Find the gap<br />inside the answer.</h3>
+                  <p>LearnLoop spots the step you skip — even when the final line is correct.</p>
+                  <div className="loop-mini-note">
+                    <span>u = 3x² + 1</span>
+                    <b>inner function missing</b>
+                  </div>
+                </>
+              )}
+
+              {selectedMode === "teach" && (
+                <>
+                  <div className="loop-card-icon"><MessageCircle size={22} /></div>
+                  <h3>Change the<br />shape of the help.</h3>
+                  <p>A prompt, a map, or a worked example — chosen from the way you learn best.</p>
+                  <div className="output-pills">
+                    <span>mind map</span>
+                    <span>worked example</span>
+                    <span className="selected">2 min prompt</span>
+                  </div>
+                </>
+              )}
+
+              {selectedMode === "adapt" && (
+                <>
+                  <div className="loop-card-icon"><Zap size={22} /></div>
+                  <h3>Make the next<br />move smaller.</h3>
+                  <p>One focused practice, tied to one recurring pattern. No busywork.</p>
+                  <div className="adapt-card">
+                    <Check size={14} />
+                    <span>separate inside / outside changes</span>
+                    <ArrowRight size={14} />
+                  </div>
+                </>
+              )}
+
+              {/* Inside Image/Card Bottom Pill Selector */}
+              <div className="loop-card-bottom-pills">
+                <span className="pills-label">LOOP STAGES:</span>
+                <button
+                  className={`card-pill-btn ${selectedMode === "diagnose" ? "active" : ""}`}
+                  onClick={() => setSelectedMode("diagnose")}
+                >
+                  <ScanIcon /> Diagnose
+                </button>
+                <button
+                  className={`card-pill-btn ${selectedMode === "teach" ? "active" : ""}`}
+                  onClick={() => setSelectedMode("teach")}
+                >
+                  <Layers3 size={13} /> Teach
+                </button>
+                <button
+                  className={`card-pill-btn ${selectedMode === "adapt" ? "active" : ""}`}
+                  onClick={() => setSelectedMode("adapt")}
+                >
+                  <GitBranch size={13} /> Adapt
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="map-section page-section">
+          <div className="map-copy">
+            <div className="section-label"><span>04</span><span>YOUR LEARNING MODEL</span></div>
+            <h2>See where you are<br /><em>without the gamification.</em></h2>
+            <p>No streaks. No badges. Just a living map of the concepts you have actually demonstrated.</p>
+            <button className="text-link" onClick={() => setDemoOpen(true)}>View a sample map <ArrowUpRight size={15} /></button>
+          </div>
+          <div className="concept-map">
+            <div className="map-grid" />
+            {conceptNodes.map((node) => (
+              <div key={node.label} className={`concept-node ${node.state}`} style={{ left: node.x, top: node.y }}>
+                <span>{node.state === "gap" ? <CircleHelp size={12} /> : node.state === "done" ? <Check size={11} /> : <span />}</span>
+                {node.label}
+              </div>
+            ))}
+            <svg className="concept-lines" viewBox="0 0 600 360" preserveAspectRatio="none">
+              <path d="M95 145 L235 68 L372 160 L215 260 L470 276" />
+              <path d="M235 68 L372 160" />
+            </svg>
+            <div className="map-legend">
+              <span><i className="legend-dot done" /> demonstrated</span>
+              <span><i className="legend-dot gap" /> needs evidence</span>
+              <span><i className="legend-dot locked" /> not yet</span>
+            </div>
+          </div>
+        </section>
+
+        <section ref={finalSectionRef} className={`final-section ${finalVisible ? "is-visible" : ""}`} style={{ backgroundColor: "#09418e" }}>
+          <div className="final-grid" />
+          <div className="final-copy">
+            <div className="section-label light"><span>05</span><span>THE LAST TWO HOURS</span></div>
+            <h2>Stop rereading<br /><em>everything.</em></h2>
+            <p>Let the coach tell you what is worth your attention — because it was there when you learned it.</p>
+            <Link className="primary-button" href="/waitlist?focus=email">Request early access <ArrowUpRight size={16} /></Link>
+          </div>
+          <div className="final-ipad"><IpadProduct scrollY={0} compact /></div>
+        </section>
       </main>
 
-      <footer className="site-footer"><a className="site-logo" href="#top"><span className="logo-symbol"><span /></span><strong>learnloop</strong></a><span>resident intelligence for the way you actually learn.</span><span>© 2025 resonance labs</span></footer>
+      <footer className="site-footer">
+        <a className="site-logo" href="#top"><span className="logo-symbol"><span /></span><strong>learnloop</strong></a>
+        <span>resident intelligence for the way you actually learn.</span>
+        <span>© 2026 LearnLoop</span>
+      </footer>
 
-      {demoOpen && <div className="modal-bg" onClick={() => setDemoOpen(false)}><div className="access-card" onClick={(event) => event.stopPropagation()}><button className="close-modal" onClick={() => setDemoOpen(false)}><X size={18} /></button>{emailSent ? <><div className="success-mark"><Check size={22} /></div><h3>You’re in the loop.</h3><p>We’ll send a thoughtful note when the private beta opens.</p><button className="secondary-button" onClick={() => setDemoOpen(false)}>Close</button></> : <><div className="product-eyebrow"><span className="eyebrow-pill">PRIVATE BETA</span> get an early look</div><h3>Make your notes<br /><em>work harder.</em></h3><p>Leave your email for the first look at LearnLoop’s notebook-native coaching loop.</p><div className="email-row"><input type="email" placeholder="you@somewhere.com" /><button onClick={() => setEmailSent(true)}>Join the loop <ArrowRight size={15} /></button></div><small>one useful email, never a noisy funnel.</small></>}</div></div>}
+      {demoOpen && (
+        <div className="modal-bg" onClick={() => setDemoOpen(false)}>
+          <div className="access-card" onClick={(event) => event.stopPropagation()}>
+            <div className="modal-header-nav">
+              <button className="modal-back-btn" onClick={() => setDemoOpen(false)}>
+                <ChevronLeft size={14} /> Return to Main Page
+              </button>
+              <button className="close-modal" onClick={() => setDemoOpen(false)} aria-label="Close modal">
+                <X size={18} />
+              </button>
+            </div>
+
+            {emailSent ? (
+              <>
+                <div className="success-mark"><Check size={22} /></div>
+                <h3>You’re in the loop.</h3>
+                <p>We’ll send a thoughtful note when the private beta opens.</p>
+                <button className="secondary-button back-home-cta" onClick={() => setDemoOpen(false)}>
+                  <ChevronLeft size={14} /> Back to Main Page
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="product-eyebrow"><span className="eyebrow-pill">PRIVATE BETA</span> get an early look</div>
+                <h3>Make your notes<br /><em>work harder.</em></h3>
+                <p>Leave your email for the first look at LearnLoop’s notebook-native coaching loop.</p>
+                <form
+                  className="email-row"
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+                    const form = e.currentTarget;
+                    const input = form.querySelector("input") as HTMLInputElement;
+                    const email = input?.value || "";
+                    if (!/^\S+@\S+\.\S+$/.test(email)) return;
+
+                    // Save locally
+                    const saved = JSON.parse(localStorage.getItem("learnloop-waitlist") || "[]");
+                    if (!saved.includes(email)) {
+                      saved.push(email);
+                      localStorage.setItem("learnloop-waitlist", JSON.stringify(saved));
+                    }
+
+                    // POST to backend
+                    await fetch("/api/waitlist", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ email }),
+                    }).catch(() => {});
+
+                    setEmailSent(true);
+                  }}
+                >
+                  <input type="email" required placeholder="you@somewhere.com" />
+                  <button type="submit">Join the loop <ArrowRight size={15} /></button>
+                </form>
+                <small>one useful email, never a noisy funnel.</small>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+
 
 function ScanIcon() {
   return <span className="scan-icon"><span /><i /></span>;
